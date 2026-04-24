@@ -1,0 +1,19 @@
+
+メインスクリプトと同階層にlog/
+メインスクリプトと同階層にLogs/
+
+メインスクリプトと同階層にnotes/ or Notes/
+メインスクリプトと同階層にWorkNotes/
+
+conda環境の使い方について丁寧な説明を
+
+sub-K180623151400
+
+56号機上の
+/mnt/data5/Tamai/HcpPipelinesForKlab-main/DMriPreprocForKlab/log/sub-K1806251400
+
+これを掘り下げる。
+
+/mnt/data5/Tamai/logs/log_sub-K1806251400.txt を参考にスクリプト組み直し。
+
+
