@@ -67,7 +67,7 @@ git clone https://github.com/iueda123/DMriPreprocForKlab
 
 コホートJSONの `SubjectsRoots` と `references/cohort_paths.md` を参考値として提示しながら、以下を**1項目ずつ順番に**確認する（複数まとめて聞かない）：
 
-1. `--src-of-subjects-on-share`（sourcedata）
+1. `--src-of-subjects-on-share`（sourcedata）— **ssMRI NIDP Agg・dMRI NIDP Agg では存在しないため聞かない**
 2. `--drv-of-subjects-on-share`（sMRI/fMRI derivatives）
 3. `--drv-of-subjects-on-proc`（処理マシンのローカル作業ディレクトリ）
 4. `--should-push-*-to-share`（ユーザーに明示的に確認する）
@@ -101,9 +101,9 @@ ssh -p 22 klab@192.168.50.XX "ls <src-of-subjects-on-share> | grep '^sub-'"
 #### ファイル名の決定
 
 `references/templates.md` の命名規則に従い、ファイル名を確定する：
-- MSMバリアントなし（dMRI前処理・sMRI/fMRI前処理）: `proc_<cohort_id>_On<machine>M_<YYYYMMDD>.sh`
-- MSMバリアントあり（LGI・ssMRI NIDP Agg・dMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD>.sh` または `proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD>.sh`
-- 日付は**スクリプト生成日**（今日の日付）を使用する
+- MSMバリアントなし（dMRI前処理・sMRI/fMRI前処理）: `proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`
+- MSMバリアントあり（LGI・ssMRI NIDP Agg・dMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` または `proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh`
+- 日付時刻は**スクリプト生成日時**（今日の日付と現在時刻）を使用する
 
 #### ローカルへの書き出し
 

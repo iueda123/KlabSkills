@@ -102,8 +102,9 @@ ssh -p 22 klab@192.168.50.XX "which tsp"
 | `/mnt/synology1-4/HCP_RestingStateStats/` | sMRI/fMRI 処理済みデータバックアップ（旧/移行中） |
 | `/mnt/synology1-4/HCP_postFS/`            | LGI 処理に使われる derivatives の別マウント       |
 | `/mnt/synology3-2/HCP_OrigVer/`           | 旧バージョン処理済みデータ                        |
-| `/mnt/KLab_DataVol2/mri2024/hcp/mri4/`    | MSMSulc/MSMAll 共有先（ssMRI NIDP Agg 出力先）    |
+| `/mnt/qnapdata2/mri2024/hcp/mri4/`        | MSMSulc/MSMAll 共有先（ssMRI NIDP Agg 出力先）    |
 | `/mnt/KLab_DataVol3/iueda/`               | NIDPs 計算プロジェクトフォルダ                    |
+| `/mnt/synology2-2/dMRI-Preprocessed/<dataset>/derivatives` | dMRI前処理結果保管先              |
 
 ---
 

@@ -267,7 +267,7 @@ for subject in ${subjects[@]}; do
     ./syncAggRslts.sh \
         --subject-id=${subject} \
         --drv-of-subjects-on-proc=<処理マシン derivatives パス> \
-        --drv-of-subjects-on-share=<KLab_DataVol2 共有先パス> \
+        --drv-of-subjects-on-share=<qnapdata2 共有先パス> \
         --keep-structure \
         --run
 done
@@ -393,7 +393,7 @@ ssh -p 22 ${SSH_USER}@192.168.50.59 "which tsp"
 | `/mnt/synology1-4/HCP_RestingStateStats/` | sMRI/fMRI 処理済みデータバックアップ（旧/移行中） |
 | `/mnt/synology1-4/HCP_postFS/`            | LGI 処理に使われる derivatives の別マウント       |
 | `/mnt/synology3-2/HCP_OrigVer/`           | 旧バージョン処理済みデータ                        |
-| `/mnt/KLab_DataVol2/mri2024/hcp/mri4/`    | MSMSulc/MSMAll 共有先（ssMRI NIDP Agg 出力先）    |
+| `/mnt/qnapdata2/mri2024/hcp/mri4/`    | MSMSulc/MSMAll 共有先（ssMRI NIDP Agg 出力先）    |
 | `/mnt/KLab_DataVol3/iueda/`               | NIDPs 計算プロジェクトフォルダ                    |
 
 > マウントスクリプト（`~/Dropbox/BashScripts/mountKlabQnap.sh` 等）は 59 号機上でも見つからなかった。マウント方法の詳細は別途確認が必要。
@@ -443,7 +443,7 @@ ssh -p 22 ${SSH_USER}@192.168.50.59 "which tsp"
   "SubjectsRoots": {
     "SRC_OF_SUBJECTS_ON_SHARE_1": "/mnt/synology4-1/HCP_RestingStateStats/2_11/sourcedata",
     "DRV_OF_SUBJECTS_ON_SHARE_1": "/mnt/synology1-4/HCP_RestingStateStats/2_11/derivatives/HCPpipeline",
-    "DRV_OF_SUBJECTS_ON_SHARE_4": "/mnt/KLab_DataVol2/mri2024/hcp/mri4/ext2_11"
+    "DRV_OF_SUBJECTS_ON_SHARE_4": "/mnt/qnapdata2/mri2024/hcp/mri4/ext2_11"
   }
 }
 ```

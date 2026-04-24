@@ -145,6 +145,8 @@ cd ${previous_wd}
 
 ## ssMRI NIDP Agg（tsp不使用、逐次実行）
 
+> **注意**: `--src-of-subjects-on-share` はこの処理タイプには存在しない。パス確認時に聞かないこと。
+
 ### 引数一覧
 
 ```bash
@@ -182,7 +184,7 @@ for sbjid in ${subjects[@]}; do
     ./syncAggRslts.sh \
         --subject-id=${sbjid} \
         --drv-of-subjects-on-proc=<drv_proc_path> \
-        --drv-of-subjects-on-share=<KLab_DataVol2_path> \
+        --drv-of-subjects-on-share=<qnapdata2_path> \
         --keep-structure \
         --run
 done
@@ -296,18 +298,18 @@ cd ${previous_wd}
 
 | 処理タイプ       | 配置場所・ファイル名                                                                                                          |
 |:-----------------|:------------------------------------------------------------------------------------------------------------------------------|
-| dMRI 前処理      | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD>.sh`                                                                           |
-| sMRI/fMRI 前処理 | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD>.sh`                                                                           |
-| LGI              | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD>.sh` |
-| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD>.sh` |
-| dMRI NIDP Agg    | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD>.sh` |
-| SyncResults      | `notes/sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD>.sh`（`<Mode>` は `Dmri`, `Nidps`, `SsmriNidp`, `Lgi`, `All` など）     |
+| dMRI 前処理      | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
+| sMRI/fMRI 前処理 | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
+| LGI              | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
+| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
+| dMRI NIDP Agg    | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
+| SyncResults      | `notes/sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD-HHMMSS>.sh`（`<Mode>` は `Dmri`, `Nidps`, `SsmriNidp`, `Lgi`, `All` など）     |
 
 例：
-- `notes/proc_2_11_On56M_20260408.sh`
-- `notes/proc_2_11_On59M_MsmAll_20260408.sh`
-- `notes/proc_2_11_On61M_MsmSulc_20260408.sh`
-- `notes/sync_2_108_On55M_Dmri_20260408.sh`
+- `notes/proc_2_11_On56M_20260408-143022.sh`
+- `notes/proc_2_11_On59M_MsmAll_20260408-143022.sh`
+- `notes/proc_2_11_On61M_MsmSulc_20260408-143022.sh`
+- `notes/sync_2_108_On55M_Dmri_20260408-143022.sh`
 
 ディレクトリ構造（メインスクリプトと同階層）:
 

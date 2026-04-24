@@ -15,7 +15,7 @@
 | sourcedata（旧系C）             | `/mnt/synology3-2/HCP_OrigVer/Keio_TakahashiLab/sourcedata/`          |
 | drv-on-share（sMRI/fMRI、主系） | `/mnt/synology4-1/HCP_RestingStateStats/2_11/derivatives/HCPpipeline` |
 | drv-on-share（sMRI/fMRI、旧系） | `/mnt/synology1-4/HCP_RestingStateStats/2_11/derivatives/HCPpipeline` |
-| drv-on-share（NIDPs共有先）     | `/mnt/KLab_DataVol2/mri2024/hcp/mri4/ext2_11`                         |
+| drv-on-share（NIDPs共有先）     | `/mnt/qnapdata2/mri2024/hcp/mri4/ext2_11`                             |
 | drv-on-proc（59号機/iueda）     | `/mnt/data2/iueda/2_11/derivatives`                                   |
 | drv-on-proc（dMRI、52号機）     | `/mnt/data3/iueda/dwi_preproc/Pttrn_NormalGpu/2_11/derivatives`       |
 | drv-on-proc（dMRI、55号機）     | `/mnt/data11/<user>/dwi_preproc/Pttrn_hmhybrid/2_11/derivatives`      |
@@ -50,6 +50,7 @@
 | drv-on-proc（dMRI NIDP Agg、55号機/iueda） | `/mnt/data12/iueda/dwi_agg/2_108/derivatives`                                |
 | drv-on-share（dMRI前処理出力、55号機）      | `/mnt/data11/iueda/dwi_preproc/Pttrn_hmhybrid/2_108/derivatives`             |
 | drv-on-share（SyncResults 同期先）         | `/mnt/qnapdata2/mri2024/hcp/mri4/ext2_108/`                                  |
+| drv-on-share（dMRI前処理保管先）           | `/mnt/synology2-2/dMRI-Preprocessed/2_108/derivatives`                       |
 
 ---
 
