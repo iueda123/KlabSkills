@@ -1,0 +1,328 @@
+---
+title: "klab-proc-batch スキル"
+subtitle: "Claude Code で MRI 処理バッチスクリプトを自動生成する"
+author: "Issei Ueda"
+date: "2026-04-26"
+lang: ja
+format:
+  revealjs:
+    theme: [default, simple]
+    slide-number: true
+    embed-resources: true
+    toc: true
+    toc-depth: 1
+    transition: fade
+    incremental: false
+    controls: true
+    width: 1280
+    height: 720
+---
+
+::: notes
+本日は KlabSkills リポジトリに実装した klab-proc-batch スキルについて紹介します。
+このスキルは Claude Code を使って、研究室の MRI 処理バッチスクリプトをインタラクティブに生成するものです。
+:::
+
+# 背景
+
+## MRI 処理スクリプト作成の手間
+
+処理ごとに確認が必要な情報が多い：
+
+- **処理タイプ**: sMRI/fMRI 前処理、dMRI 前処理、LGI 算出、NIDP 集計、SyncResults...
+- **マシン**: 52, 55, 56, 57, 59, 61 号機（各マシンのストレージ残量も要確認）
+- **コホート**: 2\_11, 2\_16, 2\_108, 3\_6... 各コホートでパスが異なる
+- **被験者リスト**: SSH で取得 or 目視確認
+- **引数**: `--src-of-subjects-on-share`、`--drv-of-subjects-on-proc` など多数
+
+::: notes
+研究室で MRI 処理を走らせるには、処理タイプ・マシン・コホート・被験者リスト・各種パスなど、多くの情報を揃えてスクリプトを書く必要があります。
+同じことを繰り返すたびにパスやオプションを調べ直す手間がかかっていました。
+:::
+
+## 従来の作業フロー
+
+```
+1. 処理タイプを決める
+2. どのマシンを使うか決める
+      → SSH でストレージ残量を確認
+3. コホート JSON やメモからパスを調べる
+4. SSH で被験者リストを取得
+5. テンプレートをもとにスクリプトを手書き
+6. SCP でマシンに転送
+7. bash で実行・ログを確認
+```
+
+毎回ステップ 2〜6 を繰り返す → **繰り返し作業・転記ミスのリスク**
+
+::: notes
+従来は処理ごとに SSH でマシン状況を確認し、過去のスクリプトやメモを参照しながら手書きしていました。
+パスの転記ミスや引数の設定漏れが起きやすい状況でした。
+:::
+
+# klab-proc-batch スキルとは
+
+## 概要
+
+**Claude Code のスキル機能**を使って、MRI 処理バッチスクリプトの組み立てを自動化する。
+
+- 会話形式でガイドに従って情報を入力
+- SSH 経由でマシン状況・被験者リストを自動取得
+- テンプレートから正確なスクリプトを生成してローカルに保存
+- マシンへの転送コマンドと実行方法も提示
+
+::: notes
+klab-proc-batch スキルは、従来の手作業フローを Claude Code との会話で置き換えます。
+ユーザーはステップに沿って必要な情報を答えるだけで、スクリプトが生成されます。
+:::
+
+## 起動方法
+
+### スラッシュコマンドで起動
+
+```
+/klab-proc-batch
+```
+
+### 自然言語でも起動
+
+以下のような言葉でも自動的にスキルが起動します：
+
+- 「バッチスクリプトを組みたい」
+- 「MRI 処理のスクリプトを作りたい」
+- 「proc スクリプトを作りたい」
+- 「sync スクリプトを作りたい」
+- 「SyncResults のスクリプトを作りたい」
+
+::: notes
+スラッシュコマンドで明示的に呼び出すほか、自然言語でバッチスクリプトを組みたいと伝えるだけでもスキルが起動します。
+:::
+
+# 案内ステップ
+
+## 全体の流れ（①〜⑨）
+
+::: {.columns}
+::: {.column width="50%"}
+**情報収集フェーズ**
+
+① 担当者 ID の確認
+
+② 処理タイプの選択
+
+③ コホート ID の確認
+
+④ 処理マシンの選択
+
+⑤ スクリプト配備パス確認
+:::
+
+::: {.column width="50%"}
+**スクリプト生成フェーズ**
+
+⑥ パスの確認（1項目ずつ）
+
+⑦ 被験者リストの確認
+
+⑧ オプションの自動判定・確認
+
+⑨ スクリプト生成・配置案内
+:::
+:::
+
+::: notes
+案内は9つのステップで構成されています。
+最初の5ステップで必要な情報を集め、後半の4ステップでスクリプトの詳細を詰めて生成します。
+:::
+
+## ステップ①②: 担当者と処理タイプ
+
+**① 担当者 ID**
+
+- パス解決とファイル命名に使用（例: `iueda`, `tamai`）
+
+**② 処理タイプ**
+
+| 処理タイプ | 依存ステップ |
+|:-----------|:------------|
+| sMRI/fMRI 前処理 | なし（最初のステップ） |
+| dMRI 前処理 | sMRI/fMRI 前処理が完了済みであること |
+| LGI 算出・集計 | sMRI/fMRI 前処理が完了済みであること |
+| ssMRI NIDP Agg | sMRI/fMRI 前処理が完了済みであること |
+| dMRI NIDP Agg | dMRI 前処理が完了済みであること |
+| SyncResults | いずれかの処理が完了済みであること |
+
+前提ステップが未完の場合は**警告を表示**
+
+::: notes
+担当者 ID はスクリプト内のパス解決とファイル命名に使います。
+処理タイプには依存関係があり、前提ステップが完了していない場合は警告を出します。
+:::
+
+## ステップ③④: コホートとマシン
+
+**③ コホート ID**
+
+- 既知パスを `cohort_paths.md` から参考値として提示
+- 例: `2_11`（Keio）、`2_108`（IRCN）
+
+**④ 処理マシンの選択**
+
+SSH 経由でストレージ残量を自動取得して提示：
+
+```bash
+ssh -p 22 klab@192.168.50.XX "df -h | grep '/mnt/data'"
+```
+
+| 処理タイプ | 推奨マシン |
+|:-----------|:----------|
+| sMRI/fMRI 前処理 | 57, 59 号機 |
+| dMRI 前処理 | 52, 55, 56, 61 号機 |
+| ssMRI NIDP Agg・LGI | 59 号機 |
+| dMRI NIDP Agg | 52, 55, 61 号機 |
+
+::: notes
+コホートに応じた既知パスを参考値として提示します。
+マシン選択では SSH で現在のストレージ残量を取得して一覧表示し、ユーザーに選択を促します。
+:::
+
+## ステップ⑥⑦: パスと被験者リスト
+
+**⑥ パスの確認（1項目ずつ）**
+
+- `--src-of-subjects-on-share`（sourcedata）
+- `--drv-of-subjects-on-share`（sMRI/fMRI derivatives）
+- `--drv-of-subjects-on-proc`（処理マシンのローカル作業ディレクトリ）
+- `--should-push-*-to-share`（明示的に確認）
+
+**⑦ 被験者リスト**
+
+SSH 経由で自動取得を試みる：
+
+```bash
+ssh -p 22 klab@192.168.50.XX "ls <src-path> | grep '^sub-'"
+```
+
+→ 取得できない場合はユーザーに目視確認を依頼
+
+::: notes
+パスは一つずつ確認します。複数まとめて聞くとミスが起きやすいため、1項目ずつ丁寧に確認します。
+被験者リストも SSH 経由で自動取得し、手入力の手間とミスを減らします。
+:::
+
+## ステップ⑧⑨: オプション判定とスクリプト生成
+
+**⑧ オプションの自動判定**
+
+処理タイプに応じて自動判定して提示・確認：
+
+| 処理タイプ | tsp | conda env |
+|:-----------|:---:|:---------:|
+| sMRI/fMRI 前処理 | 使用 | 不要 |
+| dMRI 前処理 | 不使用 | 不要 |
+| ssMRI NIDP Agg | 不使用 | 不要 |
+| dMRI NIDP Agg | 不使用 | `env_for_dMRIAgg` |
+| SyncResults | 不使用 | 不要 |
+
+**⑨ スクリプト生成・配置案内**
+
+- `output/` フォルダにローカル保存
+- SCP コマンドと実行方法を提示
+
+::: notes
+tsp の使用有無や conda 環境の必要性は処理タイプから自動判定します。
+スクリプトはローカルに保存してから、SCP でマシンに転送するためのコマンドも提示します。
+:::
+
+# 生成物の例
+
+## スクリプト例（dMRI NIDP Agg）
+
+ファイル名: `proc_2_108_On55M_MsmSulc_20260424.sh`
+
+```bash
+#!/bin/bash
+conda activate env_for_dMRIAgg
+
+subjects=()
+subjects+=("sub-UTI_Prisma_CRHD_0001_001_MR1")
+subjects+=("sub-UTI_Prisma_CRHD_0002_001_MR1")
+# ... (合計 250 名)
+
+previous_wd=$(pwd)
+cd /mnt/qnapdata3/iueda/Aggregate_dMRI_Features_on_MMP1
+
+for sbjid in ${subjects[@]}; do
+    ./agg_dMRI_NIDPs_on_MMP1.sh \
+        --subject-id=${sbjid} \
+        --drv-of-subjects-on-share=\
+          /mnt/data11/iueda/dwi_preproc/Pttrn_hmhybrid/2_108/derivatives \
+        --drv-of-subjects-on-proc=\
+          /mnt/data12/iueda/dwi_agg/2_108/derivatives \
+        --mode=msmsulc --calc-noddi=YES --verbose
+done
+
+cd ${previous_wd}
+```
+
+::: notes
+これは実際に生成されたスクリプトの例です。
+250名分の被験者IDが自動で埋め込まれ、パスやオプションも確認済みの値が正確に設定されています。
+:::
+
+## ファイル命名規則
+
+スクリプト名に処理情報が埋め込まれ、一覧性が高い：
+
+| フォーマット | 例 |
+|:------------|:--|
+| `proc_<cohort>_On<machine>M_<YYYYMMDD>.sh` | `proc_2_16_On56M_20260408.sh` |
+| `proc_<cohort>_On<machine>M_MsmAll_<date>.sh` | `proc_2_11_On59M_MsmAll_20260408.sh` |
+| `proc_<cohort>_On<machine>M_MsmSulc_<date>.sh` | `proc_2_108_On55M_MsmSulc_20260424.sh` |
+| `sync_<cohort>_On<machine>M_<Mode>_<date>.sh` | `sync_2_108_On55M_Nidps_20260408.sh` |
+
+生成後はマシンへの転送コマンドと実行コマンドも提示：
+
+```bash
+scp -P 22 output/proc_2_108_On55M_MsmSulc_20260424.sh \
+    klab@192.168.52.55:/mnt/qnapdata3/iueda/Aggregate_dMRI_Features_on_MMP1/notes/
+
+# マシン上での実行
+bash notes/proc_2_108_On55M_MsmSulc_20260424.sh
+```
+
+::: notes
+ファイル名にコホート・マシン・MSM バリアント・日付が含まれており、後から見てもどの処理か分かりやすくなっています。
+生成後は SCP コマンドと実行方法もその場で提示します。
+:::
+
+# まとめ
+
+## klab-proc-batch スキルのまとめ
+
+**解決する課題**
+
+- 処理スクリプト作成の繰り返し作業を会話形式で自動化
+- SSH 経由でマシン状況・被験者リストを自動取得
+- パス転記ミスや引数設定漏れを防止
+
+**主な機能**
+
+- 6 種の処理タイプをサポート（sMRI/fMRI, dMRI, LGI, NIDP Agg × 2, SyncResults）
+- 処理タイプの依存関係チェック
+- スクリプトをローカルに保存 → 転送コマンドを提示
+- `references/` の最新パス情報を参照
+
+**使い方**
+
+```
+/klab-proc-batch
+```
+
+または「バッチスクリプトを組みたい」と話しかけるだけ
+
+::: notes
+klab-proc-batch スキルは、繰り返し発生する MRI 処理スクリプト作成の手間を Claude Code との会話で自動化します。
+コホートや処理タイプが増えても、references ディレクトリの情報を更新することでスキルに反映されます。
+ご清聴ありがとうございました。
+:::
