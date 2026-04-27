@@ -1,20 +1,20 @@
 # KLab で MRI 処理 batch スクリプトを手動で組む方法
 
 この文書は、KLab で MRI 処理用の batch スクリプトを**人手で組めるようになる**ための導入資料です。
-このレポジトリ自体はAI用でありメイン文書は [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) ですが、そこに集約されている実務知識を新メンバーが理解できる形で表現したものになります。
+このレポジトリ自体はAI用でありメイン文書は [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) ですが、この文書はそこに集約されている実務知識を新メンバーが理解できる形で表現したものになります。
 
 
 ## 1. まず理解すべきこと
 
-klab MRI 処理の batch スクリプト作成は、単にスクリプト構文に文字列を埋める作業ではない。
-実際には、次の 4 つを毎回正しく判断する必要がある。
+klab MRI 処理の batch スクリプト作成のややこしさは、単にスクリプト構文に文字列を埋める部分にはありません。
+実際には、次の 4 つを毎回正しく判断する必要があるところに神経を使います。
 
 1. どの処理を走らせるのか
 2. どのマシンで走らせるのか
 3. どの入力パスと出力パスを使うのか
 4. どの被験者に対して実行するのか
 
-この 4 つの判断を誤ると、典型的には次の問題が起こる。
+この 4 つの判断を誤ると、次のような問題が起こります。
 
 - 前段の処理が終わっていないのに次段の処理を始めてしまう
 - 共有ストレージ上の `sourcedata` と `derivatives` を取り違える
@@ -30,10 +30,10 @@ KLab で想定している主な処理系列は次の通りである。
 
 ```text
 Step 1: sMRI/fMRI 前処理
-  ├─ Step 2: dMRI 前処理
+  ├─ Step 4: dMRI 前処理
   │    └─ Step 5: dMRI NIDP Agg
   ├─ Step 3: LGI 算出・集計
-  └─ Step 4: ssMRI NIDP Agg
+  └─ Step 2: ssMRI NIDP Agg
 
 Step 6: SyncResults
 ```
@@ -63,7 +63,6 @@ Step 6: SyncResults
 9. shell script として整形する
 10. 転送、実行、ログ確認を行う
 
-この順番が大事である。
 
 ## 4. 処理タイプごとの特徴
 
@@ -90,7 +89,6 @@ Step 6: SyncResults
 
 ### 4.4 ssMRI NIDP Agg
 
-- `tsp` は使わない
 - 各 subject の集計後に `syncAggRslts.sh` を回すことが多い
 - 主に 59 号機
 
@@ -116,13 +114,13 @@ Step 6: SyncResults
 ### 5.1 担当者 ID を決める
 
 担当者 ID は、主に `/mnt/qnapdata3/<user>/` 以下のパス解決に使う。
+（ここにスクリプトを置くと管理しやすいのでこの運用を推奨する）
 
 例:
 
 - `iueda`
 - `tamai`
 
-ここを間違えると、スクリプト本体があるリポジトリの場所も、`cd` 先も全部ずれる。
 
 ### 5.2 処理タイプを決める
 
