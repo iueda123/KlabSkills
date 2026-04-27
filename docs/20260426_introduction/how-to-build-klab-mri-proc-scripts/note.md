@@ -1,12 +1,12 @@
 # KLab で MRI 処理 batch スクリプトを手動で組む方法
 
 この文書は、KLab で MRI 処理用の batch スクリプトを**人手で組めるようになる**ための導入資料です。
-このレポジトリ自体はAI用ですが、メイン文書 [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) に集約されている実務知識を新メンバーが理解できる形で表現したものになります。
+このレポジトリ自体はAI用でありメイン文書は [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) ですが、そこに集約されている実務知識を新メンバーが理解できる形で表現したものになります。
 
 
 ## 1. まず理解すべきこと
 
-klab MRI 処理の batch スクリプト作成は、単位単にテンプレートへ文字列を埋める作業ではない。
+klab MRI 処理の batch スクリプト作成は、単にスクリプト構文に文字列を埋める作業ではない。
 実際には、次の 4 つを毎回正しく判断する必要がある。
 
 1. どの処理を走らせるのか
@@ -109,7 +109,9 @@ Step 6: SyncResults
 
 ## 5. 作業の実際
 
-ログ確認がしやすいように共有ストレージサーバー qnapdata3 に処理スクリプトを置き、実際の処理は5X号機、6X号機上でやることをおすすめします。
+共有ストレージサーバー qnapdata3 に処理スクリプトを置き、
+実際の処理は5X号機、6X号機上でやるとよい。
+こうするとスクリプトの管理やログ確認がしやすい。
 
 ### 5.1 担当者 ID を決める
 
@@ -139,7 +141,7 @@ Step 6: SyncResults
 
 コホート ID は、共有ストレージ上のパスを引く起点になる。
 具体的な番号はラボ内共有スプレッドシートを参照すること。
-以下も参考になる： [`.claude/skills/klab-proc-batch/references/cohort_paths.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/references/cohort_paths.md) を参照する。
+以下も参考になる： [`.claude/skills/klab-proc-batch/references/cohort_paths.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/references/cohort_paths.md) 
 
 例:
 
@@ -147,10 +149,6 @@ Step 6: SyncResults
 - `2_16`
 - `2_108`
 
-注意:
-
-- `SKILL.md` では `cohort_jsons` 参照も前提にしているが、このリポジトリには現時点でそのディレクトリがない
-- したがって実務上は `cohort_paths.md` を参考にしつつ、最終的には実機のディレクトリを確認する
 
 ### 5.4 処理マシンを決める
 
@@ -177,7 +175,6 @@ ssh -p 22 klab@192.168.50.XX "which tsp"
 
 考え方:
 
-- sMRI/fMRI は `tsp` のあるマシンが望ましい
 - dMRI は GPU を使う設定にするなら `nvidia-smi` が通るかを確認する
 - NIDP 集計は巨大ではないが、入力と出力の置き場の整合性が大事
 
@@ -228,12 +225,11 @@ git clone https://github.com/iueda123/DMriPreprocForKlab
 /mnt/synology4-1/HCP_RestingStateStats/2_11/sourcedata
 ```
 
-ただし、次の処理では **そもそも存在しない**。なぜ存在しないかは各スクリプトの役割を考えてください。
+ただし、次の処理では **そもそも存在しない**。なぜ存在しないかは各スクリプトの役割を考えるとわかる。
 
 - ssMRI NIDP Agg
 - dMRI NIDP Agg
 
-つまり、その 2 種類の script を書くときに `src` を入れ始めたら、最初から認識がずれている。
 
 ### 6.3 `--drv-of-subjects-on-share`
 
@@ -296,7 +292,7 @@ subjects+=("sub-XXXXXXXXXX")
 subjects+=("sub-YYYYYYYYYY")
 ```
 
-この形式にしておくと、for ループへ自然に流し込める。
+この形式にしておくと、for ループへ自然に流し込めるし、特定の被験者のみ走らせる場合にも都合が良い。
 
 ## 8. 処理オプションの決め方
 
@@ -357,7 +353,6 @@ LGI、ssMRI NIDP Agg、dMRI NIDP Agg では、`MSMAll` または `MSMSulc` を�
 - `LGI`
 - `ALL`
 
-同期したい成果物の種類を、先に日本語で説明できることが重要である。
 
 ## 9. script の骨格
 
@@ -458,11 +453,11 @@ cd ${previous_wd}
 - sync 系:
   `sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD-HHMMSS>.sh`
 
-ここで大事なのは、「人に見せるための名前」ではなく「後で事故調査できる名前」にすることである。
+ここで大事なのは「後でトラブル調査できる名前」にすることである。
 
 ## 11. 転送と実行
 
-ローカルで書いた script は、通常マシン上の `notes/` などへ転送して使う。
+ローカルで書いた script は、通常マシン上の `notes/` などへ転送して使う。類似作業をしやすくするため。
 
 ```bash
 ssh -p 22 klab@192.168.50.XX "mkdir -p /mnt/qnapdata3/<user>/<repo>/notes"
@@ -535,6 +530,6 @@ KLab の MRI 処理 batch スクリプト作成は、shell の書き方そのも
 6. オプションを決める
 7. 最後に shell script として整形する
 
-そしてAI 支援の `klab-proc-batch` スキルは、この判断を会話で補助するためのものに過ぎない。
+AI 支援用の `klab-proc-batch` スキルは、この判断を会話で補助するためのものに過ぎない。
 この文書の流れを理解していれば、AI がなくても batch スクリプトを組めるようになる。
 しかし以上のように非常にややこしい作業なので、claude code や codex cliを導入したほうが良い。
