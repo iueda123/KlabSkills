@@ -83,7 +83,7 @@ Step 6: SyncResults
 ### 4.3 LGI 算出・集計
 
 - HCP 系の postFS 出力を使う
-- `tsp` を使う
+- `tsp` を使ってもよい
 - 主に 59 号機
 - `--regname` は `MSMAll` または `MSMSulc`
 
@@ -296,16 +296,16 @@ subjects+=("sub-YYYYYYYYYY")
 
 ### 8.1 `tsp` を使うか
 
-処理タイプによって異なる。
+使わなければならないわけではないが、処理タイプによっては使えないことがあるので注意する。
 
 | 処理タイプ | tsp |
 |:--|:--:|
-| sMRI/fMRI 前処理 | 使用 |
-| LGI 算出・集計 | 使用 |
-| dMRI 前処理 | 不使用 |
-| ssMRI NIDP Agg | 不使用 |
-| dMRI NIDP Agg | 不使用 |
-| SyncResults | 不使用 |
+| sMRI/fMRI 前処理 | 使用可 |
+| LGI 算出・集計 | 使用可 |
+| dMRI 前処理 | 使用不可 |
+| ssMRI NIDP Agg | 使用不可 |
+| dMRI NIDP Agg | 使用不可 |
+| SyncResults | 使用不可 |
 
 ### 8.2 conda environment が必要か
 
