@@ -147,6 +147,8 @@ cd ${previous_wd}
 
 > **注意**: `--src-of-subjects-on-share` はこの処理タイプには存在しない。パス確認時に聞かないこと。
 
+> **注意**: `--mode` オプションは廃止された。スクリプトは常に msmsulc・msmall の両モードを逐次実行し、さらに aseg.stats から subcortical volume (SubV.csv) を生成する。
+
 ### 引数一覧
 
 ```bash
@@ -155,9 +157,14 @@ agg_sMRI_NIDPs_on_MMP1.sh \
     --drv-of-subjects-on-share=<path> \
     --drv-of-subjects-on-proc=<path> \
     [--should-push-rslt-to-share] \
-    [--mode=<msmsulc|msmall>] \
     [--verbose]
 ```
+
+**出力ファイル** (`<drv-of-subjects-on-proc>/<subject_id>/NIDPs/` 以下):
+- `<SUBJECT_ID>_*_MSMSulc.csv` / `.pscalar.nii`
+- `<SUBJECT_ID>_*_MSMAll.csv` / `.pscalar.nii`
+- `<SUBJECT_ID>_SubV.csv`（aseg.stats から生成される subcortical volume）
+- `<SUBJECT_ID>_aseg.stats`（アーカイブ）
 
 **注意**: tsp 並列化は原理的に可能だが、各 agg 完了後に `syncAggRslts.sh` を走らせる必要があるため、まず逐次版で構築し並列化は後から検討する。
 
@@ -178,15 +185,7 @@ for sbjid in ${subjects[@]}; do
         --drv-of-subjects-on-share=<drv_share_path> \
         --drv-of-subjects-on-proc=<drv_proc_path> \
         --should-push-rslt-to-share \
-        --mode=<msmsulc|msmall> \
         --verbose
-
-    ./syncAggRslts.sh \
-        --subject-id=${sbjid} \
-        --drv-of-subjects-on-proc=<drv_proc_path> \
-        --drv-of-subjects-on-share=<qnapdata2_path> \
-        --keep-structure \
-        --run
 done
 
 cd ${previous_wd}
@@ -301,7 +300,7 @@ cd ${previous_wd}
 | dMRI 前処理      | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
 | sMRI/fMRI 前処理 | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
 | LGI              | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
-| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
+| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`（両モード一括実行のため MSM suffix なし） |
 | dMRI NIDP Agg    | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
 | SyncResults      | `notes/sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD-HHMMSS>.sh`（`<Mode>` は `Dmri`, `Nidps`, `SsmriNidp`, `Lgi`, `All` など）     |
 

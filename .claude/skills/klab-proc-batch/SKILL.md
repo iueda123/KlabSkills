@@ -101,8 +101,8 @@ ssh -p 22 klab@192.168.50.XX "ls <src-of-subjects-on-share> | grep '^sub-'"
 #### ファイル名の決定
 
 `references/templates.md` の命名規則に従い、ファイル名を確定する：
-- MSMバリアントなし（dMRI前処理・sMRI/fMRI前処理）: `proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`
-- MSMバリアントあり（LGI・ssMRI NIDP Agg・dMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` または `proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh`
+- MSMバリアントなし（dMRI前処理・sMRI/fMRI前処理・ssMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`
+- MSMバリアントあり（LGI・dMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` または `proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh`
 - 日付時刻は**スクリプト生成日時**（今日の日付と現在時刻）を使用する
 
 #### ローカルへの書き出し
