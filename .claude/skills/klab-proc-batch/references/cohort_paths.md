@@ -54,6 +54,17 @@
 
 ---
 
+## 3_17 (03_Cohort01_Yaesu_Parent)
+
+確認日: 2026-04-30
+
+| 項目                            | パス                                                                                          |
+|:--------------------------------|:----------------------------------------------------------------------------------------------|
+| drv-on-share（LGI/HCP_postFS）  | `/mnt/synology4-1/HCP_postFS/03_Cohort01_Yaesu_Parent/derivatives/HCPpipeline/`              |
+| drv-on-proc（LGI、53号機/iueda）| `/mnt/data2/iueda/3_17/lgi_proc/derivatives`                                                  |
+
+---
+
 ## スクリプト配備パス
 
   * /mnt/qnapdata3/iueda/SMriFMriPreprocForKlab
