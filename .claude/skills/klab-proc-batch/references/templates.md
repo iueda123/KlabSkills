@@ -206,12 +206,14 @@ agg_dMRI_NIDPs_on_MMP1.sh \
     [--drv-of-subjects-on-share-secondary=<path>] \  # HCPpipeline derivatives
     --drv-of-subjects-on-proc=<path> \               # 作業フォルダ（dwi_agg/ 以下に別途作成）
     [--should-push-rslt-to-share] \
-    [--mode=<msmsulc|msmall>] \
     [--species=<0|1|2>] \                            # 0=Human（デフォルト）, 1=Macaque, 2=Marmoset
     [--calc-noddi=<YES|NO>] \
     [--noddi-d-par=<value>] \                        # デフォルト 1.1e-3（皮質灰白質向け）
+    [--overwrite] \
     [--verbose]
 ```
+
+> **注意**: `--mode` オプションは廃止された（version 20260128〜）。スクリプトは常に MSMSulc・MSMAll の両モードを逐次実行する。
 
 ### バッチスクリプトテンプレート
 
@@ -231,7 +233,7 @@ for sbjid in ${subjects[@]}; do
         --drv-of-subjects-on-share=<dwi_preproc_path> \
         --drv-of-subjects-on-share-secondary=<HCPpipeline_derivatives_path> \
         --drv-of-subjects-on-proc=<drv_proc_path> \
-        --mode=<msmsulc|msmall> \
+        --should-push-rslt-to-share \
         --verbose
 done
 
@@ -295,14 +297,14 @@ cd ${previous_wd}
 
 ## スクリプト命名規則
 
-| 処理タイプ       | 配置場所・ファイル名                                                                                                          |
-|:-----------------|:------------------------------------------------------------------------------------------------------------------------------|
-| dMRI 前処理      | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
-| sMRI/fMRI 前処理 | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                           |
+| 処理タイプ       | 配置場所・ファイル名                                                                                                                        |
+|:-----------------|:--------------------------------------------------------------------------------------------------------------------------------------------|
+| dMRI 前処理      | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                                  |
+| sMRI/fMRI 前処理 | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`                                                                                  |
 | LGI              | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
-| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`（両モード一括実行のため MSM suffix なし） |
-| dMRI NIDP Agg    | `notes/proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh` または `notes/proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` |
-| SyncResults      | `notes/sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD-HHMMSS>.sh`（`<Mode>` は `Dmri`, `Nidps`, `SsmriNidp`, `Lgi`, `All` など）     |
+| ssMRI NIDP Agg   | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`（両モード一括実行のため MSM suffix なし）                                        |
+| dMRI NIDP Agg    | `notes/proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`（両モード一括実行のため MSM suffix なし）                                        |
+| SyncResults      | `notes/sync_<cohort_id>_On<machine>M_<Mode>_<YYYYMMDD-HHMMSS>.sh`（`<Mode>` は `Dmri`, `Nidps`, `SsmriNidp`, `Lgi`, `All` など）            |
 
 例：
 - `notes/proc_2_11_On56M_20260408-143022.sh`
