@@ -247,8 +247,8 @@ cd ${previous_wd}
 ```bash
 syncRslts.sh \
     [--subject-id=<SUBJECT_ID>] \           # 省略時は全被験者を自動処理
-    --drv-of-subjects-on-proc=<path> \      # 処理サーバー上の SubjectsRoot（同期元）
-    --drv-of-subjects-on-share=<path> \     # 共有サーバー上の SubjectsRoot（同期先）
+    --drv-of-subjects-on-src=<path> \       # 同期元 SubjectsRoot（旧: --drv-of-subjects-on-proc）
+    --drv-of-subjects-on-dst=<path> \       # 同期先 SubjectsRoot（旧: --drv-of-subjects-on-share）
     [--mode=<NIDPS|DMRI|SSMRI_NIDP|LGI|ALL>] \   # デフォルト: NIDPS
     [--keep-structure] \
     [--run] \                               # 省略時は dry-run
@@ -282,8 +282,8 @@ cd /mnt/qnapdata3/<user>/SyncResultsForKlab
 for sbjid in ${subjects[@]}; do
     ./syncRslts.sh \
         --subject-id=${sbjid} \
-        --drv-of-subjects-on-proc=<drv_proc_path> \
-        --drv-of-subjects-on-share=<drv_share_path> \
+        --drv-of-subjects-on-src=<drv_src_path> \
+        --drv-of-subjects-on-dst=<drv_dst_path> \
         --mode=<NIDPS|DMRI|SSMRI_NIDP|LGI|ALL> \
         --run
 done
