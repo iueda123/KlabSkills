@@ -12,7 +12,7 @@ for sbjid in ${subjects[@]}; do
         --subject-id=${sbjid} \
         --drv-of-subjects-on-share=/mnt/synology1-4/HCP_RestingStateStats/2_108_IRCN/derivatives/HCPpipeline/ \
         --drv-of-subjects-on-proc=/mnt/data11/iueda/dwi_agg/2_108/derivatives \
-        --should-push-rslt-to-share \
+        --should-push-rslt-to-share=true \
         --mode=msmsulc \
         --calc-noddi=YES \
         --noddi-d-par=1.1e-3 \

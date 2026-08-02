@@ -32,7 +32,7 @@ for sbjid in ${subjects[@]}; do
         --drv-of-subjects-on-share=/mnt/synology2-2/dMRI-Preprocessed/2_16/derivatives \
         --drv-of-subjects-on-share-secondary=/mnt/synology4-1/HCP_RestingStateStats/03_Cohort04_Komaba/HCPstyle/derivatives/HCPpipeline \
         --drv-of-subjects-on-proc=/mnt/data12/iueda/dwi_agg/2_16/derivatives \
-        --should-push-rslt-to-share \
+        --should-push-rslt-to-share=true \
         --mode=msmall \
         --verbose
 done

@@ -608,7 +608,7 @@ for sbjid in ${subjects[@]}; do
         --subject-id=${sbjid} \
         --drv-of-subjects-on-share=/mnt/synology4-1/HCP_RestingStateStats/2_11/derivatives/HCPpipeline \
         --drv-of-subjects-on-proc=/mnt/data2/iueda/2_11/derivatives \
-        --should-push-rslt-to-share \
+        --should-push-rslt-to-share=true \
         --verbose
 done
 

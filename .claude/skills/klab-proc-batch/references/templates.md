@@ -156,7 +156,7 @@ agg_sMRI_NIDPs_on_MMP1.sh \
     --subject-id=<subject_id> \
     --drv-of-subjects-on-share=<path> \
     --drv-of-subjects-on-proc=<path> \
-    [--should-push-rslt-to-share] \
+    [--should-push-rslt-to-share=<true|false>] \
     [--verbose]
 ```
 
@@ -184,7 +184,7 @@ for sbjid in ${subjects[@]}; do
         --subject-id=${sbjid} \
         --drv-of-subjects-on-share=<drv_share_path> \
         --drv-of-subjects-on-proc=<drv_proc_path> \
-        --should-push-rslt-to-share \
+        --should-push-rslt-to-share=<true|false> \
         --verbose
 done
 
@@ -205,7 +205,7 @@ agg_dMRI_NIDPs_on_MMP1.sh \
     --drv-of-subjects-on-share=<path> \              # dMRI前処理の出力先（dwi_preproc/...）
     [--drv-of-subjects-on-share-secondary=<path>] \  # HCPpipeline derivatives
     --drv-of-subjects-on-proc=<path> \               # 作業フォルダ（dwi_agg/ 以下に別途作成）
-    [--should-push-rslt-to-share] \
+    [--should-push-rslt-to-share=<true|false>] \
     [--species=<0|1|2>] \                            # 0=Human（デフォルト）, 1=Macaque, 2=Marmoset
     [--calc-noddi=<YES|NO>] \
     [--noddi-d-par=<value>] \                        # デフォルト 1.1e-3（皮質灰白質向け）
@@ -233,7 +233,7 @@ for sbjid in ${subjects[@]}; do
         --drv-of-subjects-on-share=<dwi_preproc_path> \
         --drv-of-subjects-on-share-secondary=<HCPpipeline_derivatives_path> \
         --drv-of-subjects-on-proc=<drv_proc_path> \
-        --should-push-rslt-to-share \
+        --should-push-rslt-to-share=<true|false> \
         --verbose
 done
 
