@@ -26,6 +26,9 @@ description: Klab MRI処理バッチスクリプトをインタラクティブ�
 `references/cohort_jsons/<cohort_id>.json` を読んで既知のパスを参考値として提示する。
 確認済みパスは `references/cohort_paths.md` も参照する。
 
+すべての処理スクリプトは `--dataset-id` を必須引数として要求する（ログを `logs/<dataset_id>/<subject_id>/<プロセスID>/` 以下に整理するためのID）。
+特にユーザーからの指定がなければ、コホートIDをそのまま `--dataset-id` の値として使う（例: コホート `2_11` なら `--dataset-id=2_11`）。別の値を使いたい場合はユーザーに確認する。
+
 ### ④ 処理マシンの選択
 
 `references/pipeline.md` の推奨マシン一覧を提示する。
@@ -101,8 +104,7 @@ ssh -p 22 klab@192.168.50.XX "ls <src-of-subjects-on-share> | grep '^sub-'"
 #### ファイル名の決定
 
 `references/templates.md` の命名規則に従い、ファイル名を確定する：
-- MSMバリアントなし（dMRI前処理・sMRI/fMRI前処理・ssMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`
-- MSMバリアントあり（LGI・dMRI NIDP Agg）: `proc_<cohort_id>_On<machine>M_MsmAll_<YYYYMMDD-HHMMSS>.sh` または `proc_<cohort_id>_On<machine>M_MsmSulc_<YYYYMMDD-HHMMSS>.sh`
+- `proc_<cohort_id>_On<machine>M_<YYYYMMDD-HHMMSS>.sh`（全処理タイプ共通。LGI・ssMRI NIDP Agg・dMRI NIDP Agg はいずれも MSMSulc/MSMAll の両方を1回の実行で処理するため、MSMバリアントごとのファイル分けは不要）
 - 日付時刻は**スクリプト生成日時**（今日の日付と現在時刻）を使用する
 
 #### ローカルへの書き出し
@@ -119,11 +121,11 @@ ssh -p 22 klab@192.168.50.XX "ls <src-of-subjects-on-share> | grep '^sub-'"
 ローカルに生成したスクリプトをマシンに配置するコマンドをユーザーに提示する：
 
 ```bash
-# notes/ ディレクトリが存在しない場合は作成
-ssh -p 22 klab@192.168.50.XX "mkdir -p /mnt/qnapdata3/<user>/<repo>/notes"
+# batch-scripts/ ディレクトリが存在しない場合は作成
+ssh -p 22 klab@192.168.50.XX "mkdir -p /mnt/qnapdata3/<user>/<repo>/batch-scripts"
 
 # スクリプトをマシンに転送
-scp -P 22 <local_script_path> klab@192.168.50.XX:/mnt/qnapdata3/<user>/<repo>/notes/<filename>.sh
+scp -P 22 <local_script_path> klab@192.168.50.XX:/mnt/qnapdata3/<user>/<repo>/batch-scripts/<filename>.sh
 ```
 
 #### 実行・ログ確認方法の提示

@@ -42,16 +42,16 @@ Klab の MRI 処理バッチスクリプト生成を支援するスキル群を�
 
 入力は主に以下です。
 
-- コホート ID 例: `2_11`, `2_16`, `2_108`
+- コホート ID 例: `2_11`, `2_16`, `2_108`（未指定時はそのまま `--dataset-id` の値としても使う）
 - 処理マシン 例: 52, 55, 56, 57, 59, 61
 - 処理対象の共有ストレージパスとローカル作業パス
 - 被験者 ID の一覧
-- 処理タイプごとのオプション 例: `--dmri-proc-pttrn`, `--use-gpu`, `--mode`
+- 処理タイプごとのオプション 例: `--dataset-id`, `--dmri-proc-pttrn`, `--use-gpu`, `--mode`
 
-出力は `.claude/skills/klab-proc-batch/output/` 配下に保存されるシェルスクリプトです。命名規則は `references/templates.md` に整理されており、たとえば以下のようなファイルが生成されます。
+出力は `.claude/skills/klab-proc-batch/output/` 配下に保存されるシェルスクリプトです。命名規則は `references/templates.md` に整理されており、たとえば以下のようなファイルが生成されます（各処理マシンへの配備先は `notes/` ではなく `batch-scripts/` ディレクトリ）。
 
 - `proc_2_16_On56M_20260424-170527.sh`
-- `proc_2_108_On55M_MsmSulc_20260424.sh`
+- `proc_2_108_On55M_20260424-170527.sh`
 - `sync_2_16_On56M_Dmri_20260424-163603.sh`
 
 ## 補足

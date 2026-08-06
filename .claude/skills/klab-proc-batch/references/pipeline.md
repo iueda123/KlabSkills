@@ -13,6 +13,12 @@ Step 6: SyncResults  (SyncResultsForKlab)
   ※ Step 1〜5 のいずれかの完了後に実行。対象データに応じて --mode を選ぶ。
 ```
 
+## dataset-id とログパスの規則
+
+全処理タイプの主要スクリプトは `--dataset-id`（英数字・`.`・`_`・`-` のみ）を必須引数として要求する。
+ログはスクリプトと同じリポジトリ内の `logs/<dataset_id>/<subject_id>/<プロセスID>/` 以下に生成される。
+特にユーザーからの指定がない限り、`--dataset-id` にはコホートIDをそのまま使う。
+
 ## ジョブ管理・conda env
 
 | 処理タイプ       |  tsp   |     conda env     |
@@ -76,7 +82,7 @@ ssh -p 22 klab@192.168.50.XX "whoami && ls /mnt/qnapdata3/"
 
 # 各スクリプトの存在確認
 ssh -p 22 klab@192.168.50.XX \
-    "ls /mnt/qnapdata3/*/SMriFMriPreprocForKlab/run_hcppipelines_for_klab.sh"
+    "ls /mnt/qnapdata3/*/SMriFMriPreprocForKlab/run_smri_fmri_preproc_pipelines_for_klab.sh"
 ssh -p 22 klab@192.168.50.XX \
     "ls /mnt/qnapdata3/*/DMriPreprocForKlab/run_dmri_preproc_pipelines_for_klab.sh"
 ssh -p 22 klab@192.168.50.XX \
