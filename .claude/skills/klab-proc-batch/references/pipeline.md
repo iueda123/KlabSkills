@@ -65,6 +65,21 @@ Step 6: SyncResults  (SyncResultsForKlab)
 
 ---
 
+## 共有ストレージは SSH 不要（重要）
+
+`/mnt/qnapdata3/`（スクリプト配備先）や `/mnt/synology*`・`/mnt/qnapdata2`（データ共有先）は
+**作業マシンからも各処理マシンからも同一パスで見える共有マウント**。
+そのため以下はローカルのファイル操作で完結し、SSH/scp を使う必要はない：
+
+- 生成したバッチスクリプトの配備 → `cp <local> /mnt/qnapdata3/<user>/<repo>/batch-scripts/`
+- スクリプト配備状況の確認 → `ls /mnt/qnapdata3/<user>/<repo>/<main_script>.sh`
+- 被験者リスト取得・入力ファイル（`Diffusion/`, `MNINonLinear/`, `NIDPs/` 等）の存在確認
+- 処理済み／未処理の切り分け（例: `NIDPs/` の有無で未処理被験者を抽出）
+
+SSH が本当に必要なのは**マシン固有の情報**だけ：
+`df -h | grep '/mnt/data'`（ローカルディスク空き容量）、`conda env list`、`nvidia-smi`、`which tsp`、そして実行そのもの。
+`/mnt/qnapdata3` がマウントされていない環境で作業している場合のみ scp での転送を案内する。
+
 ## SSH 経由のマシン状況確認コマンド
 
 ```bash

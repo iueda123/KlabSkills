@@ -116,17 +116,28 @@ ssh -p 22 klab@192.168.50.XX "ls <src-of-subjects-on-share> | grep '^sub-'"
 <skill_base_dir>/output/<filename>.sh
 ```
 
-#### マシンへの配置案内
+#### マシンへの配置（scp 不要・共有ストレージへ直接コピー）
 
-ローカルに生成したスクリプトをマシンに配置するコマンドをユーザーに提示する：
+**`/mnt/qnapdata3/` は共有ストレージであり、作業マシンからも各処理マシンからも同じパスで見える。**
+したがってスクリプト配備に SSH/scp は不要で、ローカルから `cp` するだけで全マシンに配備が完了する。
+（同様に `/mnt/synology*`・`/mnt/qnapdata2` などの共有マウントも直接参照できるため、
+被験者リスト取得や入力ファイルの存在確認も SSH を使わずローカルで実施してよい。
+SSH が本当に必要なのはマシン固有の情報のみ： `df -h /mnt/data*`・`conda env list`・`nvidia-smi`・実行そのもの）
+
+配備は自分で実行する：
 
 ```bash
 # batch-scripts/ ディレクトリが存在しない場合は作成
-ssh -p 22 klab@192.168.50.XX "mkdir -p /mnt/qnapdata3/<user>/<repo>/batch-scripts"
+mkdir -p /mnt/qnapdata3/<user>/<repo>/batch-scripts
 
-# スクリプトをマシンに転送
-scp -P 22 <local_script_path> klab@192.168.50.XX:/mnt/qnapdata3/<user>/<repo>/batch-scripts/<filename>.sh
+# 共有ストレージ上のリポジトリへ直接コピー
+cp <local_script_path> /mnt/qnapdata3/<user>/<repo>/batch-scripts/<filename>.sh
 ```
+
+配備後は `ls -l` と `diff` で配置先の内容・実行権限を確認する。
+
+> `/mnt/qnapdata3` がマウントされていない環境で作業している場合に限り、従来どおり scp を案内する：
+> `scp -P 22 <local_script_path> klab@192.168.50.XX:/mnt/qnapdata3/<user>/<repo>/batch-scripts/<filename>.sh`
 
 #### 実行・ログ確認方法の提示
 
