@@ -1,7 +1,7 @@
 # KLab で MRI 処理 batch スクリプトを手動で組む方法
 
 この文書は、KLab で MRI 処理用の batch スクリプトを**人手で組めるようになる**ための導入資料です。
-このレポジトリ自体はAI用でありメイン文書は [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) ですが、この文書はそこに集約されている実務知識を新メンバーが理解できる形で表現したものになります。
+このレポジトリ自体はAI用でありメイン文書は [`.claude/skills/klab-proc-batch/SKILL.md`](/media/iu/STORAGE/__GitHub__/SisterRepos/KlabSkills/.claude/skills/klab-proc-batch/SKILL.md) ですが、この文書はそこに集約されている実務知識を新メンバーが理解できる形で表現したものになります。
 
 
 ## 1. まず理解すべきこと
@@ -139,7 +139,7 @@ Step 6: SyncResults
 
 コホート ID は、共有ストレージ上のパスを引く起点になる。
 具体的な番号はラボ内共有スプレッドシートを参照すること。
-以下も参考になる： [`.claude/skills/klab-proc-batch/references/cohort_paths.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/references/cohort_paths.md) 
+以下も参考になる： [`.claude/skills/klab-proc-batch/references/cohort_paths.md`](/media/iu/STORAGE/__GitHub__/SisterRepos/KlabSkills/.claude/skills/klab-proc-batch/references/cohort_paths.md) 
 
 例:
 
@@ -150,7 +150,7 @@ Step 6: SyncResults
 
 ### 5.4 処理マシンを決める
 
-推奨マシンは [`.claude/skills/klab-proc-batch/references/pipeline.md`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/references/pipeline.md) に整理されている。
+推奨マシンは [`.claude/skills/klab-proc-batch/references/pipeline.md`](/media/iu/STORAGE/__GitHub__/SisterRepos/KlabSkills/.claude/skills/klab-proc-batch/references/pipeline.md) に整理されている。
 
 目安は次の通り。
 
@@ -262,7 +262,7 @@ git clone https://github.com/iueda123/DMriPreprocForKlab
 ```
 
 ここは、処理タイプごとにディレクトリ設計が違う。
-過去の script や [`.claude/skills/klab-proc-batch/output/`](/media/iu/STORAGE/__GitHub__/KlabSkills/.claude/skills/klab-proc-batch/output) の実例も参考にしてよい。
+過去の script や [`.claude/skills/klab-proc-batch/output/`](/media/iu/STORAGE/__GitHub__/SisterRepos/KlabSkills/.claude/skills/klab-proc-batch/output) の実例も参考にしてよい。
 
 ## 7. 被験者リストの作り方
 
